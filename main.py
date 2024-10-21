@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import os
 import sys
 import configparser
 
@@ -7,6 +8,7 @@ from flask import Flask, Response
 from threading import Thread
 from PIL import Image, ImageEnhance
 
+cwd = os.path.realpath(__file__)
 config = configparser.ConfigParser()
 config.read("config.ini")
 frames = []
@@ -17,7 +19,7 @@ if len(sys.argv) < 2:
 else:
     image_file = sys.argv[1]
 
-gif = Image.open(image_file)
+gif = Image.open(os.path.join(os.getcwd(), 'gifs', image_file))
 
 try:
     num_frames = gif.n_frames
@@ -115,7 +117,7 @@ def rgb_matrix_loop():
         while(True):
             if image_file != config.get('frame', 'file'):
                 image_file = config.get('frame', 'file')
-                gif = Image.open(image_file)
+                gif = Image.open(os.path.join(os.getcwd(), 'gifs', image_file))
                 try:
                     num_frames = gif.n_frames
                     should_update_frames = True
